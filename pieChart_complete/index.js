@@ -15,7 +15,8 @@ var pieGroup = svg.append('g')
     .attr('transform', 'translate(' + pieX + ',' + pieY + ')');
 
 //set up scales to position circles using the data
-var scaleColor = d3.scaleOrdinal().domain(["16-19", "20-24", "25-34", "35-44", "45-54", "55-64","65+"]).range(["red","orange","yellow","green","blue","purple","magenta"]);
+var scaleColor = d3.scaleOrdinal().domain(["16-19", "20-24", "25-34", "35-44", "45-54", "55-64","65+"])
+    .range(["red","orange","yellow","green","blue","purple","magenta"]);
 //var scaleY = d3.scaleLinear().domain([0,1200]).range([400, 0]);  //remember that 0,0 is at the top of the screen! 300 is the lowest value on the y axis
 
 var nestedData = [];

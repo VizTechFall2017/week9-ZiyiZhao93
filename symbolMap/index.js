@@ -18,6 +18,32 @@ path = d3.geoPath()
     .projection(albersProjection);        //tell it to use the projection that we just made to convert lat/long to pixels
 
 
+var symbolPoints = [
+    {angle: 0, r0: 30, r1: 80},
+    {angle: Math.PI * 0.25, r0: 30, r1: 70},
+    {angle: Math.PI * 0.5, r0: 30, r1: 80},
+    {angle: Math.PI * 0.75, r0: 30, r1: 70},
+    {angle: Math.PI, r0: 30, r1: 80},
+    {angle: Math.PI * 1.25, r0: 30, r1: 70},
+    {angle: Math.PI * 1.5, r0: 30, r1: 80},
+    {angle: Math.PI * 1.75, r0: 30, r1: 70},
+    {angle: Math.PI * 2, r0: 30, r1: 80}
+];
+
+var makeSymbol = d3.radialArea()
+    .angle(function(d) {
+        return d.angle;
+    })
+    .innerRadius(function(d) {
+        return d.r0;
+    })
+    .outerRadius(function(d) {
+        return d.r1;
+    });
+
+var symbolData = makeSymbol(symbolPoints);
+
+
 queue()
     .defer(d3.json, "./cb_2016_us_state_20m.json")
     .defer(d3.csv, "./dataPoints.csv")
@@ -34,25 +60,22 @@ queue()
         .attr('stroke-width',.2);
 
 
-    /*
-    svg.selectAll('circle')
-        .data(centroids)       //bind a single data point, with the long lat of Boston
+
+    symbol = svg.selectAll('.symbolGroups')
+        .data(dataPoints)       //bind a single data point, with the long lat of Boston
                                                     //note that long is negative because it is a W long point!
         .enter()
-        .append('circle')
-        .attr('cx', function (d){
-            return d.center[0];
-        })
-        .attr('cy', function (d){
-            return d.center[1];
-        })
-        .attr('id',function(d){return d.name})
-        .attr('r', function(d){
-            return sizeScale(stateLookup.get(d.name))
-        })
+        .append('g')
+        .attr('class','symbolGroups')
+        .attr('transform', function(d){
+            return 'translate('+ albersProjection([d.long, d.lat])[0] +','+ albersProjection([d.long, d.lat])[1] +')'
+        });
+
+    symbol.append('path')
+        .attr('d',symbolData)
         .attr('fill','purple')
-        .attr('fill-opacity',.7);
-    */
+        .attr('transform','scale(.1)');
+
 
   });
 

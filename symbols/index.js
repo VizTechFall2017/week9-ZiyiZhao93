@@ -35,6 +35,16 @@ var symbolPoints = [
     {angle: Math.PI * 2, r0: 30, r1: 80}
 ];
 
+
+var makeSymbol = d3.radialArea()
+    .angle(function (d){return d.angle})
+    .innerRadius(function (d) {return d.r0})
+    .outerRadius(function (d) {return d.r1});
+
+
+var symbolData = makeSymbol(symbolPoints);
+
+
 //import the data from the .csv file
 d3.csv('./incomeData.csv', function(dataIn){
 
@@ -58,14 +68,19 @@ d3.csv('./incomeData.csv', function(dataIn){
         .attr('transform', 'translate(-50,250)rotate(270)');
 
     // Add the path
-    svg.selectAll('circle')
+    var symbol = svg.selectAll('.symbolGroups')
         .data(loadData)
         .enter()
-        .append("circle")
-        .attr('cx',function(d){return scaleX(d.age)})
-        .attr('cy',function(d){return scaleY(d.women)})
-        .attr('r',5)
-        .attr('fill','blue')
+        .append("g")
+        .attr('class','symbolGroups')
+        .attr('transform', function(d){
+            return 'translate('+ scaleX(d.age) +','+ scaleY(d.women) +')'
+        });
+
+    symbol.append('path')
+        .attr('d',symbolData)
+        .attr('fill','pink')
+        .attr('transform','scale(.1)');
 
 
 });
