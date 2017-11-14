@@ -4,6 +4,8 @@ var height = document.getElementById('svg1','svg2','svg3').clientHeight;
 var marginLeft = 0;
 var marginTop = 0;
 
+var nestedData = [];
+
 var svg = d3.select('#svg1')
     .append('g')
     .attr('transform', 'translate(' + marginLeft + ',' + marginTop + ')');
@@ -31,7 +33,7 @@ var cityLookup = d3.map();
 
 var colorScale = d3.scaleLinear().range(['orange','orange']);
 
-var scaleX = d3.scaleBand().rangeRound([0, width-2*marginLeft]).padding(0.2);
+var scaleX = d3.scaleBand().rangeRound([0, width-2*marginLeft]).padding(0.5);
 var scaleY = d3.scaleLinear().range([height-2*marginTop, 0]);
 
 
@@ -102,12 +104,12 @@ d3.csv('./subway.csv', function(dataIn) {
 
     var loadData = nestedData.filter(function(d){return d.key == 'total'})[0].values;
 
-    svg3.append("g")
+    svg.append("g")
         .attr('class','xaxis')
         .attr('transform','translate(0,'+ (height-2*marginTop) +')')
         .call(d3.axisBottom(scaleX));
 
-    svg3.append("g")
+    svg.append("g")
         .attr('class', 'yaxis')
         .call(d3.axisLeft(scaleY));
 
@@ -129,14 +131,14 @@ function drawPoints(pointData){
         .call(d3.axisLeft(scaleY));
 
 
-    var rects = svg3.selectAll('.bars')
+    var rects = svg.selectAll('.bars')
         .data(pointData, function(d){return d.things;});
 
     console.log(pointData);
 
     rects
         .transition()
-        .duration(100)
+        .duration(200)
         .attr('x',function(d){
             return scaleX(d.things);
         })
@@ -172,7 +174,7 @@ function drawPoints(pointData){
 }
 
 function updateData(selectedGender){
-    return nestedData.filter(function(d){return d.key == 'female'})[0].values;
+    return nestedData.filter(function(d){return d.key == 'total'})[0].values;
 }
 
 
@@ -182,5 +184,4 @@ function sliderMoved(value){
     drawPoints(newData);
 
 }
-
 

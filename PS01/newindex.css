@@ -1,0 +1,15 @@
+.svgBox{
+    height: 500px;
+    width: 300px;
+}
+.svgBox2{
+    height: 500px;
+    width: 300px;
+}
+.svgBox3{
+    width: 100%;
+    height: 500px;
+}
+input{
+float: left;
+}
